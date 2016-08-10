@@ -68,7 +68,7 @@
                 $('#calendar').fullCalendar({
                     displayEventTime: false,
                     allDay: true,
-                    events: '/api/events/all',
+                    events: 'api/events/all',
 					timeFormat: 'H(:mm)',
 					resources: 
 					[
@@ -157,7 +157,7 @@
                     var data = {id: $('#id').val()};
 
                     $.ajax({
-                        url: '/api/events/delete',
+                        url: 'api/events/delete',
                         method: 'POST',
                         dataType: 'json',
                         data: data,
@@ -214,7 +214,7 @@
                             </div>
                             <div class="form-group">
 								<label>Rooms: </label>
-								<select>
+								<select name="room" id="room" class="room">
 									<option value="1">Hörsaal 1</option>
 									<option value="2">Hörsaal 2</option>
 									<option value="3">Hörsaal 8</option>

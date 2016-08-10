@@ -26,7 +26,7 @@ Route::group(['prefix' => 'api'], function() {
 		Route::get('get', 'EventsController@getEvent');
 		Route::post('set', 'EventsController@setEvent');
 		Route::post('delete', 'EventsController@deleteEvent');
-		Route::get('resources', 'EventsController@Resources');
+		Route::get('resources', 'RoomsController@resources');
 		Route::get('echo', function() {
 			return json_encode(['ping' => true]);
 		});

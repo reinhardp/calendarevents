@@ -53,8 +53,9 @@ class EventsController extends Controller
 
         return json_encode($result);
     }
-	public function Resources() {
-		$rooms = Rooms::all();
+	public function resources() {
+		$rooms = Rooms::orderBy('name', 'asc')
+		->get();
 		return json_encode($rooms);
 	}
     public function deleteEvent() {
