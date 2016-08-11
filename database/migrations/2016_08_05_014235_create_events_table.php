@@ -40,6 +40,9 @@ class CreateEventsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('events');
+		Schema::table('events', function($table) {
+			$table->dropForeign(['resourceid']);
+		});
+        Schema::dropIfExists('events');
     }
 }

@@ -13,12 +13,12 @@ class RoomsTableSeeder extends Seeder
     {
         DB::table('rooms')->delete();
 		$rooms = array(
-		['name' => 'Hörsaal 1', 'building_id' => '2'],
-		['name' => 'Hörsaal 2', 'building_id' => '2'],
-		['name' => 'Hörsaal 8', 'building_id' => '1'],
-		['name' => 'Cafe Relax', 'building_id' => '1'],
-		['name' => 'EB-Raum 1', 'building_id' => '3'],
-		['name' => 'EB-Raum 2', 'building_id' => '3'],
+		['title' => 'Hörsaal 1', 'building_id' => '2'],
+		['title' => 'Hörsaal 2', 'building_id' => '2'],
+		['title' => 'Hörsaal 8', 'building_id' => '1'],
+		['title' => 'Cafe Relax', 'building_id' => '1'],
+		['title' => 'EB-Raum 1', 'building_id' => '3'],
+		['title' => 'EB-Raum 2', 'building_id' => '3'],
 		);
 		DB::table('rooms')->insert($rooms);
     }

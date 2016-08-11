@@ -10,7 +10,7 @@ use App\Rooms;
 class RoomsController extends Controller
 {
     public function resources() {
-		$rooms = Rooms::orderBy('name', 'asc')
+		$rooms = Rooms::orderBy('id', 'asc')
 		->get();
 
 		return json_encode($rooms);

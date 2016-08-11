@@ -17,19 +17,31 @@ class EventsController extends Controller
 {
     public function getEvents() {
         $events = Event::all();
+		foreach ($events as $event) {
+			  $event->title_real = $event->title;
+			  $event->title .= ' ' . $event->resource;
+			  
+		}
         return json_encode($events);
     }
 
     public function getEvent() {
 		
         $event = Event::find(Input::get('id'));
+		
+		$event_struct = [
+		       'title' => 'bla', 
+		       'start' => $event->start,
+			   'end'   => $event->end,			   
+		     ];
+		
         return json_encode($event);
     }
 
     public function setEvent(Request $request) {
         $result = ['success' => false];
         $input = Input::all();
-		var_dump($request);
+		
         if(isset($input['id']) && !empty($input['id']) && Event::find($input['id'])) {
             $event = Event::find($input['id']);
             if($event) {
@@ -61,7 +73,7 @@ class EventsController extends Controller
 			$event->resourceid = $request->room;
 			$event->resource = $room->name;
 			$event->save();
-            //$result['event'] = $event;
+            $result['event'] = $event;
             $result['success'] = true;
 			
         }

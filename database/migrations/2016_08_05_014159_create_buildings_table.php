@@ -27,6 +27,9 @@ class CreateBuildingsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('buildings');
+		Schema::table('rooms', function($table) {
+			$table->dropForeign(['building_id']);
+		});
+        Schema::dropIfExists('buildings');
     }
 }

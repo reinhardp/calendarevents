@@ -68,15 +68,9 @@
                 $('#calendar').fullCalendar({
                     displayEventTime: false,
                     allDay: true,
-                    events: 'api/events/all',
+					resources: 'api/events/resources',
+                    events: 'api/events/all',					
 					timeFormat: 'H(:mm)',
-					resources: 
-					[
-						{ id: 'a', title: 'Room A' },
-						{ id: 'b', title: 'Room B', eventColor: 'green' },
-						{ id: 'c', title: 'Room C', eventColor: 'orange' },
-						{ id: 'd', title: 'Room D', eventColor: 'red' }
-					],
                     dayClick: function(date, jsEvent, view) {
                         clearModal();
                         setModalDate(date);
@@ -89,7 +83,7 @@
                         setModalDate(calEvent.start, calEvent.end);
                         $('#modalTitle').text('Edit Event');
                         $('#id').val(calEvent.id);
-                        $('#title').val(calEvent.title);
+                        $('#title').val(calEvent.title_real);
                         $('#details').val(calEvent.details);
                         $('#btnDel').css({display: 'inline'});
                         $('#modalCalendar').modal('show');
@@ -101,7 +95,7 @@
                         home: {
                             text: 'Home',
                             click: function() {
-                                location.href = '/';
+                                location.href = '{{ url('/') }}';
                             }
                         }
                     },

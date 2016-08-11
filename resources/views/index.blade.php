@@ -5,26 +5,35 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
 
         <!-- css -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.5.0/fullcalendar.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.1/fullcalendar.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.min.css">
-
+		<link rel="stylesheet" href="{{ URL::asset('/css/scheduler.min.css') }}">
         <!-- js -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.5.0/fullcalendar.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.1/fullcalendar.min.js"></script>
+		<script src="{{ URL::asset('/js/scheduler.min.js') }}"></script>
         <script>
             $(document).ready(function() {
                 $('#calendar').fullCalendar({ 
+					schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
                     displayEventTime: true,
 					editable: true,
 					selectable: true,
 					eventLimit: true, // allow "more" link when too many events
 					defaultView: 'agendaDay',
                     allDay: true,
+					resources: 'api/events/resources',
                     events: 'api/events/all',
 					timeFormat: 'H(:mm)',
-					resources: 'api/events/resources',
+					/* select: function(start, end) {
+						// var title = prompt('Event title');
+						
+                                location.href = 'edit';
+                        
+						var eventData;						
+					},*/
                     eventClick: function(calEvent, jsEvent, view) {
 
                         $('#modalTitle').text(calEvent.title)
