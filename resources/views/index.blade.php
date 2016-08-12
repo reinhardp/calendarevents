@@ -5,16 +5,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
 
         <!-- css -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.1/fullcalendar.min.css">
+        <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.1/fullcalendar.min.css"> -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.min.css">
 		<link rel="stylesheet" href="{{ URL::asset('/css/scheduler.min.css') }}">
+		<link rel="stylesheet" href="{{ URL::asset('/css/jquery-ui.min.css') }}">
+		<link rel="stylesheet" href="{{ URL::asset('/css/fullcalendar.css') }}">
         <!-- js -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.1/fullcalendar.min.js"></script>
 		<script src="{{ URL::asset('/js/scheduler.min.js') }}"></script>
+		<script src="{{ URL::asset('/js/lang/de.js') }}"></script>
         <script>
+			//$( function() {
+				//$( "#fc-event-container" ).resizable();
+			//} );
             $(document).ready(function() {
                 $('#calendar').fullCalendar({ 
 					schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
@@ -22,11 +28,15 @@
 					editable: true,
 					selectable: true,
 					eventLimit: true, // allow "more" link when too many events
-					defaultView: 'agendaDay',
+					defaultView: 'agendaWeek',
                     allDay: true,
 					resources: 'api/events/resources',
                     events: 'api/events/all',
 					timeFormat: 'H(:mm)',
+					businessHours: {
+						start: '08:00',
+						end: '18:00',
+					},
 					/* select: function(start, end) {
 						// var title = prompt('Event title');
 						
@@ -34,11 +44,16 @@
                         
 						var eventData;						
 					},*/
+					eventRender: function(event,element) {
+						
+						element.find('.fc-title').append("<br/>" + event.details + "<br/> Raum: " + event.roomname + "<br/> Gebäude: " + event.building);
+					},
                     eventClick: function(calEvent, jsEvent, view) {
 
                         $('#modalTitle').text(calEvent.title)
                         if(calEvent.details != null) {
                             $('#modalBody').html(calEvent.details)
+							$('#modalMoredetails').html( "Raum: " + calEvent.roomname + "<br/>" + "Gebäude: " + calEvent.building)
                         }
 
                         $('#modalCalendar').modal('show');
@@ -48,7 +63,7 @@
                     },
                     customButtons: {
                         editEvent: {
-                            text: 'Edit Event',
+                            text: 'Editieren',
                             click: function() {
                                 location.href = 'edit';
                             }
@@ -57,7 +72,7 @@
                     header: {
 						left: 'prev,next today',
 						center: 'title',
-                        right: 'editEvent,agendaDay,agendaTwoDay,agendaWeek,month'
+                        right: 'editEvent,agendaWeek,month,agendaDay'
                     },                            
 					views: {
 						agendaTwoDay: {
@@ -86,6 +101,8 @@
               </div>
               <div class="modal-body" id="modalBody">
               </div>
+			  <div class="modal-body" id="modalMoredetails">
+			  </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
               </div>

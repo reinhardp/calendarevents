@@ -6,9 +6,12 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <!-- css -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.5.0/fullcalendar.min.css">
+        <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.5.0/fullcalendar.min.css"> -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.min.css">
+		<link rel="stylesheet" href="{{ URL::asset('/css/scheduler.min.css') }}">
+		<link rel="stylesheet" href="{{ URL::asset('/css/jquery-ui.min.css') }}">
+		<link rel="stylesheet" href="{{ URL::asset('/css/fullcalendar.css') }}">
 
         <!-- js -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -17,11 +20,13 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.5.0/fullcalendar.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.5.4/ckeditor.js"></script>
+		<script src="{{ URL::asset('/js/scheduler.min.js') }}"></script>
+		<script src="{{ URL::asset('/js/lang/de.js') }}"></script>
         <script>
             var DISPLAY_DATE_FORMAT = 'DD-MMM-YYYY';
             var JSON_DATE_FORMAT = 'YYYY-MM-DD';
             var tempEventObj;
-
+			
             function setModalDate(startDate, endDate) {
                 var displayStartDate, displayEndDate, jsonStartDate, jsonEndDate;
 
@@ -71,23 +76,79 @@
 					resources: 'api/events/resources',
                     events: 'api/events/all',					
 					timeFormat: 'H(:mm)',
+					displayEventTime: true,
+					editable: true,
+					selectable: true,
+					selectHelper: true,
+					defaultView: 'agendaWeek',
+					businessHours: {
+						start: '08:00',
+						end: '18:00',
+					},
+					eventRender: function(event,element) {
+						element.find('.fc-title').append("<br/>" + event.details + "<br/> Raum: " + event.roomname + "<br/> (" + event.building + ")");
+					},
                     dayClick: function(date, jsEvent, view) {
                         clearModal();
                         setModalDate(date);
-                        $('#modalTitle').text('Add New Event');
+                        $('#modalTitle').text('Neuen Event anlegen' );
                         $('#btnDel').css({display: 'none'});
+						$('#starttime').val('');
+						$('#endtime').val('');
+						$('#room').val(1);
                         $('#modalCalendar').modal('show');
                     },
                     eventClick: function(calEvent, jsEvent, view) {
                         tempEventObj = calEvent;
                         setModalDate(calEvent.start, calEvent.end);
-                        $('#modalTitle').text('Edit Event');
+                        $('#modalTitle').text('Event editieren');
                         $('#id').val(calEvent.id);
                         $('#title').val(calEvent.title_real);
+						$('#starttime').val(calEvent.starttime);
+						$('#endtime').val(calEvent.endtime);
                         $('#details').val(calEvent.details);
+						$('#room').val(calEvent.resourceId);
                         $('#btnDel').css({display: 'inline'});
                         $('#modalCalendar').modal('show');
                     },
+					select: function(start, end) {
+						$('#modalTitle').text('Neuen Event anlegen' );
+						var x = 1;
+						var hour = "";
+						var m = "";
+						var startdate = start._i[0] + "-" + start._i[1] + "-" + start._i[2];
+						var enddate = end._i[0] + "-" + end._i[1] + "-" + end._i[2];
+						setModalDate(startdate, enddate);
+						if(start._i[3] < 10) {
+							hour = "0" + start._i[3];
+						} else {
+							hour = start._i[3];
+						}
+						if(start._i[4] < 10) {
+							m = "0" + start._i[4];
+						} else {
+							m = start._i[4];
+						}
+						var starttime = hour + ":" + m;
+
+						if(end._i[3]<10) {
+							hour = "0" + end._i[3];
+						} else {
+							hour = end._i[3];
+						}
+						if(end._i[4]<10) {
+							m = "0" + end._i[4];
+						} else {
+							m = end._i[4];
+						}
+
+						var endtime = hour + ":" + m;
+						$('#starttime').val(starttime);
+						$('#endtime').val(endtime);
+						$('#room').val(1);
+						$('#btnDel').css({display: 'none'});
+						$('#modalCalendar').modal('show');
+					},
                     eventMouseover: function() {
                         $(this).css({'cursor': 'pointer'});
                     },
@@ -100,7 +161,10 @@
                         }
                     },
                     header: {
-                        right: 'home today prev,next',
+						left: 'prev,next today',
+						center: 'title',
+                        //right: 'editEvent,agendaWeek,month,agendaDay'
+                        right: 'home agendaWeek today',
                     }                                 
                 });
 
@@ -189,32 +253,32 @@
                                 <input type="text" name="title" id="title" class="form-control" placeholder="Title">
                             </div>
                             <div class="form-group">
-                                <label>Start Date</label>                    
+                                <label>Start Datum</label>                    
                                 <input type="text" name="display-start" id="display-start" class="form-control" placeholder="Start Date">
                                 <input type="hidden" name="start" id="start">
                             </div>
                             <div class="form-group">
-                                <label>End Date</label>                    
+                                <label>End Datum</label>                    
                                 <input type="text" name="display-end" id="display-end" class="form-control" placeholder="End Date">
                                 <input type="hidden" name="end" id="end">
                             </div>
                              <div class="form-group">
-                                <label>Start Time</label>                    
-                                <input type="time" name="starttime" id="starttime" class="form-control" placeholder="Start Time">
+                                <label>Startzeit</label>                    
+                                <input type="time" name="starttime" id="starttime" class="form-control" placeholder="HH:mm">
                             </div>
                             <div class="form-group">
-                                <label>End Time</label>                    
-                                <input type="time" name="endtime" id="endtime" class="form-control" placeholder="End Time">
+                                <label>Endzeit</label>                    
+                                <input type="time" name="endtime" id="endtime" class="form-control" placeholder="HH:mm">
                             </div>
                             <div class="form-group">
-								<label>Rooms: </label>
+								<label>Räume</label>
 								<select name="room" id="room" class="room">
 									<option value="1">Hörsaal 1</option>
 									<option value="2">Hörsaal 2</option>
 									<option value="3">Hörsaal 8</option>
 									<option value="4">Cafe Relax</option>
 									<option value="5">EB Raum 1</option>
-									<option value="8">EB Raum 2</option>
+									<option value="6">EB Raum 2</option>
 								</select>
 							</div>
                             <div class="form-group">
@@ -224,9 +288,9 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success" id="btnSave">Save</button>
-                        <button type="button" class="btn btn-danger" id="btnDel">Delete</button>
-                        <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success" id="btnSave">Speichern</button>
+                        <button type="button" class="btn btn-danger" id="btnDel">Löschen</button>
+                        <button type="button" class="btn btn-info" data-dismiss="modal">Schließen</button>
                     </div>
                 </div>
             </div>

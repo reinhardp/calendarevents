@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 
 use App\Event;
 use App\Rooms;
+use App\Buildings;
 use Input;
 
 use Log;
@@ -18,8 +19,13 @@ class EventsController extends Controller
     public function getEvents() {
         $events = Event::all();
 		foreach ($events as $event) {
+			  $room = Rooms::find($event->resourceId);
+			  $building = Buildings::find($room->building_id);
 			  $event->title_real = $event->title;
-			  $event->title .= ' ' . $event->resource;
+			  //$event->title .= ' (Raum: ' . $event->resource . ' Gebäude: ' . $building->name . ')';
+			  $event->building = $building->name;
+			  $event->roomname = $event->resource;
+			  $event->details_real = $event->details;
 			  
 		}
         return json_encode($events);
@@ -28,21 +34,15 @@ class EventsController extends Controller
     public function getEvent() {
 		
         $event = Event::find(Input::get('id'));
-		
-		$event_struct = [
-		       'title' => 'bla', 
-		       'start' => $event->start,
-			   'end'   => $event->end,			   
-		     ];
-		
+
         return json_encode($event);
     }
 
     public function setEvent(Request $request) {
         $result = ['success' => false];
         $input = Input::all();
-		
         if(isset($input['id']) && !empty($input['id']) && Event::find($input['id'])) {
+		Log::info('The id is set');
             $event = Event::find($input['id']);
             if($event) {
 				$room = Rooms::find($request->room);
@@ -54,13 +54,14 @@ class EventsController extends Controller
 				$event->endtime = $request->endtime;
 				$event->details = $request->details;
 				$event->resourceid = $request->room;
-				$event->resource = $room->name;
+				$event->resource = $room->title;
 				$event->save();
                 $result['event'] = $event;
                 $result['success'] = true;
             }
         }
         else {
+			Log::info('The id is not set');
             //$event = Event::create($input);
 			$room = Rooms::find($request->room);
 			$event = new Event;
@@ -71,7 +72,7 @@ class EventsController extends Controller
 			$event->endtime = $request->endtime;
 			$event->details = $request->details;
 			$event->resourceid = $request->room;
-			$event->resource = $room->name;
+			$event->resource = $room->title;
 			$event->save();
             $result['event'] = $event;
             $result['success'] = true;

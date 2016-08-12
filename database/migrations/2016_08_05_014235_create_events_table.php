@@ -20,6 +20,7 @@ class CreateEventsTable extends Migration
             $table->dateTime('end');
             $table->time('starttime');
             $table->time('endtime');
+			$table->string('resource');
 			$table->integer('resourceId')->unsigned();	// ID des Raumes
             $table->boolean('disabled')->default(false);            
             $table->timestamps();
