@@ -42,7 +42,7 @@ class EventsController extends Controller
         $result = ['success' => false];
         $input = Input::all();
         if(isset($input['id']) && !empty($input['id']) && Event::find($input['id'])) {
-		Log::info('The id is set');
+		
             $event = Event::find($input['id']);
             if($event) {
 				$room = Rooms::find($request->room);
@@ -61,7 +61,8 @@ class EventsController extends Controller
             }
         }
         else {
-			Log::info('The id is not set');
+			
+			//Log::info('Checkbox: ' . $request->allDay);
             //$event = Event::create($input);
 			$room = Rooms::find($request->room);
 			$event = new Event;

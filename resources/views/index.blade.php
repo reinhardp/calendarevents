@@ -14,7 +14,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.1/fullcalendar.min.js"></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.1/fullcalendar.min.js"></script> -->
+		<script src="{{ URL::asset('/js/fullcalendar.js') }}"></script>
 		<script src="{{ URL::asset('/js/scheduler.min.js') }}"></script>
 		<script src="{{ URL::asset('/js/lang/de.js') }}"></script>
         <script>
@@ -25,7 +26,7 @@
                 $('#calendar').fullCalendar({ 
 					schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
                     displayEventTime: true,
-					editable: true,
+					//editable: true,
 					selectable: true,
 					eventLimit: true, // allow "more" link when too many events
 					defaultView: 'agendaWeek',

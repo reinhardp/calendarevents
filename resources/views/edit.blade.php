@@ -17,13 +17,14 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.5.0/fullcalendar.min.js"></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.5.0/fullcalendar.min.js"></script> -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.5.4/ckeditor.js"></script>
+		<script src="{{ URL::asset('/js/fullcalendar.js') }}"></script>
 		<script src="{{ URL::asset('/js/scheduler.min.js') }}"></script>
 		<script src="{{ URL::asset('/js/lang/de.js') }}"></script>
         <script>
-            var DISPLAY_DATE_FORMAT = 'DD-MMM-YYYY';
+            var DISPLAY_DATE_FORMAT = 'DD-MM-YYYY';
             var JSON_DATE_FORMAT = 'YYYY-MM-DD';
             var tempEventObj;
 			
@@ -71,7 +72,7 @@
                 });
 
                 $('#calendar').fullCalendar({
-                    displayEventTime: false,
+                    displayEventTime: true,
                     allDay: true,
 					resources: 'api/events/resources',
                     events: 'api/events/all',					
@@ -111,38 +112,42 @@
                         $('#btnDel').css({display: 'inline'});
                         $('#modalCalendar').modal('show');
                     },
-					select: function(start, end) {
+					select: function(start, end, event) {
 						$('#modalTitle').text('Neuen Event anlegen' );
 						var x = 1;
 						var hour = "";
 						var m = "";
-						var startdate = start._i[0] + "-" + start._i[1] + "-" + start._i[2];
-						var enddate = end._i[0] + "-" + end._i[1] + "-" + end._i[2];
-						setModalDate(startdate, enddate);
-						if(start._i[3] < 10) {
-							hour = "0" + start._i[3];
-						} else {
-							hour = start._i[3];
-						}
-						if(start._i[4] < 10) {
-							m = "0" + start._i[4];
-						} else {
-							m = start._i[4];
-						}
-						var starttime = hour + ":" + m;
+						var startdate;
+						var enddate;
+						if(start._i !== undefined) {
+							startdate = start._i[0] + "-" + (start._i[1]+1) + "-" + start._i[2];
+							enddate = end._i[0] + "-" + (end._i[1]+1) + "-" + end._i[2];
+							setModalDate(startdate, enddate);
+							if(start._i[3] < 10) {
+								hour = "0" + start._i[3];
+							} else {
+								hour = start._i[3];
+							}
+							if(start._i[4] < 10) {
+								m = "0" + start._i[4];
+							} else {
+								m = start._i[4];
+							}
+							var starttime = hour + ":" + m;
 
-						if(end._i[3]<10) {
-							hour = "0" + end._i[3];
-						} else {
-							hour = end._i[3];
-						}
-						if(end._i[4]<10) {
-							m = "0" + end._i[4];
-						} else {
-							m = end._i[4];
-						}
+							if(end._i[3]<10) {
+								hour = "0" + end._i[3];
+							} else {
+								hour = end._i[3];
+							}
+							if(end._i[4]<10) {
+								m = "0" + end._i[4];
+							} else {
+								m = end._i[4];
+							}
 
-						var endtime = hour + ":" + m;
+							var endtime = hour + ":" + m;
+						} 
 						$('#starttime').val(starttime);
 						$('#endtime').val(endtime);
 						$('#room').val(1);
@@ -164,7 +169,7 @@
 						left: 'prev,next today',
 						center: 'title',
                         //right: 'editEvent,agendaWeek,month,agendaDay'
-                        right: 'home agendaWeek today',
+                        right: 'home agendaWeek month today',
                     }                                 
                 });
 
@@ -270,8 +275,12 @@
                                 <label>Endzeit</label>                    
                                 <input type="time" name="endtime" id="endtime" class="form-control" placeholder="HH:mm">
                             </div>
+							<div class="form-group">
+								<label>Ganzer Tag</label>
+								<input type="checkbox" id="allday" class="form-control" name="allDay" value="allDay">
+							</div>
                             <div class="form-group">
-								<label>Räume</label>
+								<label>Raum: </label>
 								<select name="room" id="room" class="room">
 									<option value="1">Hörsaal 1</option>
 									<option value="2">Hörsaal 2</option>
