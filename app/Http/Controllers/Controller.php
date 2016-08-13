@@ -13,7 +13,7 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, AuthorizesResources, DispatchesJobs, ValidatesRequests;
 	public function __construct() {
-		//App::setLocale('de');
+		App::setLocale('de');
 	}
 
 }

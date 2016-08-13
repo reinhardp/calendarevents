@@ -82,9 +82,12 @@
 					selectable: true,
 					selectHelper: true,
 					defaultView: 'agendaWeek',
+					minTime: '07:00:00',
+					maxTime: '19:00:00',
+					slotDuration: '00:15:00',
 					businessHours: {
-						start: '08:00',
-						end: '18:00',
+						start: '07:00',
+						end: '19:00',
 					},
 					eventRender: function(event,element) {
 						element.find('.fc-title').append("<br/>" + event.details + "<br/> Raum: " + event.roomname + "<br/> (" + event.building + ")");
@@ -169,7 +172,7 @@
 						left: 'prev,next today',
 						center: 'title',
                         //right: 'editEvent,agendaWeek,month,agendaDay'
-                        right: 'home agendaWeek month today',
+                        right: 'home agendaWeek today',
                     }                                 
                 });
 
@@ -254,16 +257,16 @@
                                 <label class="control-label">Please fill in the form properly!</label>
                             </div>
                             <div class="form-group">
-                                <label>Title</label>                    
+                                <label>Titel</label>                    
                                 <input type="text" name="title" id="title" class="form-control" placeholder="Title">
                             </div>
                             <div class="form-group">
-                                <label>Start Datum</label>                    
+                                <label>Startdatum</label>                    
                                 <input type="text" name="display-start" id="display-start" class="form-control" placeholder="Start Date">
                                 <input type="hidden" name="start" id="start">
                             </div>
                             <div class="form-group">
-                                <label>End Datum</label>                    
+                                <label>Enddatum</label>                    
                                 <input type="text" name="display-end" id="display-end" class="form-control" placeholder="End Date">
                                 <input type="hidden" name="end" id="end">
                             </div>
@@ -275,10 +278,10 @@
                                 <label>Endzeit</label>                    
                                 <input type="time" name="endtime" id="endtime" class="form-control" placeholder="HH:mm">
                             </div>
-							<div class="form-group">
+							<!-- <div class="form-group">
 								<label>Ganzer Tag</label>
 								<input type="checkbox" id="allday" class="form-control" name="allDay" value="allDay">
-							</div>
+							</div> -->
                             <div class="form-group">
 								<label>Raum: </label>
 								<select name="room" id="room" class="room">

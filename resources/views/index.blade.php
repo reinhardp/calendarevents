@@ -34,9 +34,13 @@
 					resources: 'api/events/resources',
                     events: 'api/events/all',
 					timeFormat: 'H(:mm)',
+					minTime: '07:00:00',
+					maxTime: '19:00:00',
+					timezone:'local',
+					//slotDuration: '00:15:00',
 					businessHours: {
-						start: '08:00',
-						end: '18:00',
+						start: '07:00',
+						end: '19:00',
 					},
 					/* select: function(start, end) {
 						// var title = prompt('Event title');
